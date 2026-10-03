@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quy luật phân li độc lập — Bài 37, Phần II</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-soft:#F2FAEE;
+    --ink:#20301F;
+    --muted:#5C6B57;
+    --line:#E3EEDD;
+    --yellow:#FFC93C;
+    --yellow-dk:#F2994A;
+    --green:#6FCF7C;
+    --green-dk:#219653;
+    --blue:#2FA5E0;
+    --blue-dk:#1C87BE;
+    --coral:#FF6B5B;
+    --white:#FFFFFF;
+    --font:'Montserrat', sans-serif;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font); font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--yellow); color:var(--ink); }
+  h1,h2,h3,h4{ font-family:var(--font); font-weight:800; margin:0; color:var(--ink); }
+  p{margin:0;}
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 24px; }
+  section{ padding:70px 0; }
+  .soft{ background:var(--bg-soft); }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:15px;
+    color:var(--blue-dk); background:#E8F6FC; padding:7px 16px; border-radius:999px; margin-bottom:16px;
+  }
+  .eyebrow .dot{ width:8px; height:8px; border-radius:50%; background:var(--blue); }
+  h2.shead{ font-size:36px; line-height:1.2; margin-bottom:14px; }
+  .lede{ font-size:19px; color:var(--muted); max-width:720px; }
+  .lede b{ color:var(--ink); }
+
+  /* ---------- NAV ---------- */
+  nav{ position:sticky; top:0; z-index:50; background:rgba(255,255,255,.94); border-bottom:2px solid var(--line); backdrop-filter:blur(6px);}
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 24px; flex-wrap:wrap; }
+  .brand{ font-weight:800; font-size:19px; color:var(--ink); }
+  .brand span{ color:var(--blue-dk); }
+  .navlinks{ display:flex; gap:8px; flex-wrap:wrap; }
+  .navlinks a{
+    text-decoration:none; color:var(--ink); font-weight:600; font-size:15px;
+    padding:8px 14px; border-radius:10px; transition:.15s;
+  }
+  .navlinks a:hover{ background:var(--bg-soft); color:var(--blue-dk); }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding-top:60px; padding-bottom:50px; }
+  .hero .wrap{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px; align-items:center; }
+  .hero h1{ font-size:50px; line-height:1.12; margin-top:14px; }
+  .hero h1 em{ font-style:normal; color:var(--green-dk); background:linear-gradient(180deg,transparent 62%, var(--yellow) 62%); padding:0 4px;}
+  .hero-visual{ display:flex; flex-direction:column; align-items:center; gap:16px; background:var(--bg-soft); border-radius:28px; padding:34px 20px;}
+  .cross-row{ display:flex; align-items:center; gap:18px; }
+  .seed{ border-radius:50%; flex-shrink:0; box-shadow: inset -8px -10px 16px rgba(0,0,0,.15), inset 5px 6px 10px rgba(255,255,255,.5);}
+  .seed.round{ border:3px solid rgba(0,0,0,.12);}
+  .seed.wrinkled{ border:3px dashed rgba(0,0,0,.28);}
+  .op{ font-size:30px; font-weight:800; color:var(--muted); }
+  .arrow-down{ font-size:26px; color:var(--blue-dk); }
+  .f1-badge{ font-weight:800; font-size:17px; background:var(--ink); color:var(--yellow); padding:12px 22px; border-radius:14px; }
+
+  /* ---------- GLOSSARY ---------- */
+  .glossary-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .term-card{ background:var(--white); border:2px solid var(--line); border-radius:18px; padding:26px; }
+  .term-card .bar{ width:46px; height:7px; border-radius:4px; margin-bottom:16px; }
+  .term-card h4{ font-size:19px; margin-bottom:10px; }
+  .term-card p{ font-size:15.5px; color:var(--muted); }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{ display:flex; flex-direction:column; gap:0; }
+  .tl-item{ display:grid; grid-template-columns:64px 1fr; gap:22px; position:relative; padding-bottom:36px;}
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-dot{
+    width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:15px; color:#fff; position:relative; z-index:2;
+  }
+  .tl-item:not(:last-child)::before{
+    content:''; position:absolute; left:31px; top:64px; bottom:-36px; width:3px; background:var(--line);
+  }
+  .tl-body{ background:var(--white); border:2px solid var(--line); border-radius:16px; padding:22px 26px; }
+  .tl-body h4{ font-size:19px; margin-bottom:6px; }
+  .tl-body p{ font-size:16px; color:var(--muted); }
+
+  /* ---------- GENERIC CARD / BOX ---------- */
+  .box{ background:var(--white); border:2px solid var(--line); border-radius:var(--radius); padding:32px; }
+  .tip-box{ background:#FFF6E4; border:2px solid var(--yellow); border-radius:16px; padding:20px 24px; }
+  .tip-box h4{ color:var(--yellow-dk); font-size:16px; margin-bottom:6px; }
+  .tip-box p{ font-size:15.5px; color:var(--ink); }
+
+  /* ---------- EXPLAIN DIAGRAM ---------- */
+  .explain-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:24px;}
+  .gbox{ font-weight:800; font-size:19px; color:#fff; padding:16px 22px; border-radius:14px; text-align:center; min-width:78px;}
+  .gbox small{ display:block; font-weight:600; font-size:12px; margin-top:4px; opacity:.9;}
+  .arrow-h{ font-size:26px; color:var(--muted); font-weight:700;}
+  .seedwrap{ text-align:center; }
+  .seedwrap .lab{ margin-top:8px; font-weight:700; font-size:14px; }
+  .seedwrap .sub{ font-size:12.5px; color:var(--muted); font-style:italic; }
+  .gamete-row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .gamete-row .gbox{ flex:1; min-width:130px; font-size:24px; }
+
+  /* ---------- PUNNETT TABLE (static) ---------- */
+  .punnett-wrap{ overflow-x:auto; }
+  table.punnett{ border-collapse:separate; border-spacing:4px; margin:0 auto; }
+  table.punnett th, table.punnett td{
+    width:92px; height:78px; text-align:center; font-weight:800; font-size:17px; border-radius:10px; color:#fff;
+  }
+  table.punnett th{ background:var(--ink); color:var(--yellow); font-size:16px; }
+  table.punnett th.corner{ background:transparent; color:var(--muted); font-size:13px; }
+  .legend-row{ display:flex; flex-wrap:wrap; gap:20px; margin-top:26px; }
+  .legend-item{ display:flex; align-items:center; gap:9px; font-size:15px; font-weight:600; }
+  .swatch{ width:18px; height:18px; border-radius:5px; flex-shrink:0;}
+
+  /* ---------- STATS ---------- */
+  .stat-cards{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:34px;}
+  .stat-card{ background:var(--white); border:2px solid var(--line); border-radius:18px; padding:26px 16px; text-align:center;}
+  .stat-card .num{ font-weight:900; font-size:44px; }
+  .stat-card .lab{ font-size:15px; font-weight:700; margin-top:6px; color:var(--muted);}
+  .bigratio{ text-align:center; font-weight:900; font-size:52px; color:var(--green-dk); margin-bottom:10px;}
+  .mnemonic{ text-align:center; font-size:16.5px; color:var(--muted); font-weight:600;}
+
+  /* ---------- LAB ---------- */
+  .lab-parents{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:10px;}
+  .parent-block{ background:var(--bg-soft); border-radius:16px; padding:22px;}
+  .parent-block h4{ font-size:19px; margin-bottom:16px;}
+  .gene-picker{ margin-bottom:16px; }
+  .gene-picker .glabel{ font-size:15px; color:var(--muted); font-weight:700; margin-bottom:8px; display:block;}
+  .seg{ display:flex; gap:8px; }
+  .seg button{
+    flex:1; font-weight:800; font-size:18px; padding:13px 0; border-radius:10px;
+    border:2px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; transition:.12s;
+  }
+  .seg button.on{ background:var(--blue); border-color:var(--blue); color:#fff; }
+  .pheno-preview{ margin-top:10px; font-size:16.5px; font-weight:800; color:var(--green-dk); }
+  .cross-summary{ text-align:center; font-size:22px; font-weight:800; color:var(--ink); margin:18px 0 20px; }
+  .lab-actions{ display:flex; justify-content:center; margin-bottom:30px;}
+  .btn-cross{
+    font-weight:800; font-size:19px; background:var(--coral); color:#fff; border:none;
+    padding:17px 36px; border-radius:14px; cursor:pointer; transition:.15s;
+    box-shadow:0 10px 22px rgba(255,107,91,.35);
+  }
+  .btn-cross:hover{ transform:translateY(-2px); box-shadow:0 14px 26px rgba(255,107,91,.4); }
+  #labResult{ border-top:2px solid var(--line); padding-top:28px; }
+  .lab-grid-wrap{ display:flex; gap:32px; flex-wrap:wrap; align-items:flex-start; }
+  .lab-summary{ font-size:16.5px; color:var(--muted); margin-bottom:20px; font-weight:600;}
+  .result-label{ font-size:21px; font-weight:800; color:var(--ink); margin-bottom:18px; background:var(--bg-soft); padding:14px 18px; border-radius:12px;}
+  .lab-ratio{ font-weight:900; font-size:30px; color:var(--green-dk); margin-bottom:16px;}
+  .bar-row{ display:grid; grid-template-columns:150px 1fr 46px; align-items:center; gap:14px; font-size:16.5px; margin-bottom:12px; font-weight:700;}
+  .bar-track{ height:16px; background:var(--bg-soft); border-radius:8px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:8px; }
+
+  /* ---------- LAW ---------- */
+  .law-card{ background:var(--ink); border-radius:24px; padding:44px; }
+  .law-card .qmark{ font-size:70px; color:var(--yellow); line-height:1; font-weight:900;}
+  .law-card p.quote{ font-size:25px; line-height:1.5; color:#fff; max-width:820px; font-weight:600;}
+  .simple-box{ background:var(--white); border:2px solid var(--line); border-radius:18px; padding:28px 32px; margin-top:24px;}
+  .simple-box h4{ color:var(--blue-dk); font-size:17px; margin-bottom:10px;}
+  .simple-box p{ font-size:17px; }
+  .meaning-grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:36px;}
+  .meaning-card{ border-radius:18px; padding:0; overflow:hidden; border:2px solid var(--line);}
+  .meaning-head{ padding:20px 26px; font-weight:800; font-size:18px; color:#fff;}
+  .meaning-card ul{ margin:0; padding:22px 26px 26px 44px; font-size:16px; color:var(--ink); display:flex; flex-direction:column; gap:12px; background:#fff;}
+
+  footer{ padding:40px 0 60px; border-top:2px solid var(--line); background:var(--bg-soft);}
+  footer .wrap{ text-align:center; font-size:14.5px; color:var(--muted); font-weight:600;}
+
+  @media (max-width:900px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .hero h1{ font-size:36px; }
+    .glossary-grid{ grid-template-columns:1fr 1fr; }
+    .stat-cards{ grid-template-columns:1fr 1fr;}
+    .lab-parents{ grid-template-columns:1fr;}
+    .meaning-grid{ grid-template-columns:1fr;}
+    section{ padding:50px 0; }
+    .box{ padding:20px; }
+    body{ font-size:17px; }
+  }
+  @media (max-width:560px){
+    .glossary-grid{ grid-template-columns:1fr; }
+    table.punnett th, table.punnett td{ width:64px; height:58px; font-size:13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">🧬 Phân li độc lập <span>· Bài 37</span></div>
+    <div class="navlinks">
+      <a href="#tu-khoa">Từ khoá</a>
+      <a href="#thi-nghiem">Thí nghiệm</a>
+      <a href="#bang-lai">Bảng lai</a>
+      <a href="#thong-ke">Tỉ lệ</a>
+      <a href="#lab">Phòng TN ảo</a>
+      <a href="#quy-luat">Quy luật</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Bài 37 · Phần II · Khoa học tự nhiên 9</div>
+      <h1>Vì sao lai hai tính trạng<br>lại ra <em>4 kiểu hạt?</em></h1>
+      <p class="lede" style="margin-top:16px">Mendel lai hai cây đậu Hà Lan khác nhau <b>2 tính trạng</b> cùng lúc. Kết quả bất ngờ ở đời F2: 4 kiểu hạt xuất hiện theo tỉ lệ <b>9 : 3 : 3 : 1</b>. Cùng tìm hiểu vì sao nhé!</p>
+    </div>
+    <div class="hero-visual">
+      <div class="cross-row">
+        <div class="seedwrap">
+          <div class="seed round" style="width:80px;height:80px;background:radial-gradient(circle at 32% 28%, #fff8, transparent 45%), var(--yellow)"></div>
+        </div>
+        <div class="op">×</div>
+        <div class="seedwrap">
+          <div class="seed wrinkled" style="width:80px;height:80px;background:radial-gradient(circle at 32% 28%, #fff8, transparent 45%), var(--green-dk)"></div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="f1-badge">F1: 100% AaBb</div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ GLOSSARY ============ -->
+  <section id="tu-khoa" class="soft">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>Trước khi bắt đầu</div>
+      <h2 class="shead">Vài từ khoá cần nhớ</h2>
+      <p class="lede" style="margin-bottom:30px">Đọc nhanh phần này để phần sau dễ hiểu hơn nhé!</p>
+      <div class="glossary-grid" id="glossaryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ THI NGHIEM ============ -->
+  <section id="thi-nghiem">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>1. Thí nghiệm của Mendel</div>
+      <h2 class="shead">Chuyện gì đã xảy ra?</h2>
+      <p class="lede" style="margin-bottom:36px">Lai cây hạt vàng, vỏ trơn với cây hạt xanh, vỏ nhăn — cả hai đều thuần chủng.</p>
+      <div class="timeline" id="timelineHost"></div>
+    </div>
+  </section>
+
+  <!-- ============ GIAI THICH ============ -->
+  <section class="soft">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>2. Giải thích</div>
+      <h2 class="shead">Vì sao lại có 4 kiểu hạt?</h2>
+      <div class="box">
+        <div class="tip-box" style="margin-bottom:28px;">
+          <h4>💡 Hãy tưởng tượng thế này</h4>
+          <p>Mỗi giao tử (hạt phấn, noãn) giống như <b>1 chiếc túi nhỏ</b>. Túi này chỉ được "bốc" ngẫu nhiên 1 mảnh từ cặp (A, a) và 1 mảnh từ cặp (B, b) — việc bốc mảnh nào không phụ thuộc vào mảnh kia!</p>
+        </div>
+        <div class="explain-row">
+          <div class="seedwrap">
+            <div class="seed round" style="width:60px;height:60px;background:var(--yellow)"></div>
+            <div class="lab">AABB</div><div class="sub">vàng, trơn</div>
+          </div>
+          <div class="op">×</div>
+          <div class="seedwrap">
+            <div class="seed wrinkled" style="width:60px;height:60px;background:var(--green-dk)"></div>
+            <div class="lab">aabb</div><div class="sub">xanh, nhăn</div>
+          </div>
+          <div class="arrow-h">→</div>
+          <div class="gbox" style="background:var(--ink)">100% AaBb<small>vàng, trơn (F1)</small></div>
+        </div>
+        <p style="font-weight:700; margin-bottom:16px;">F1 giảm phân → ra đúng 4 kiểu túi, tỉ lệ bằng nhau:</p>
+        <div class="gamete-row">
+          <div class="gbox" style="background:var(--yellow)">AB<small>1/4</small></div>
+          <div class="gbox" style="background:var(--yellow-dk)">Ab<small>1/4</small></div>
+          <div class="gbox" style="background:var(--green)">aB<small>1/4</small></div>
+          <div class="gbox" style="background:var(--green-dk)">ab<small>1/4</small></div>
+        </div>
+        <p style="margin-top:24px; color:var(--muted); font-size:16px;">Khi thụ tinh, 4 kiểu túi bên bố "bắt cặp" ngẫu nhiên với 4 kiểu túi bên mẹ → tạo ra <b style="color:var(--ink)">16 tổ hợp</b> ở đời F2 (xem bảng bên dưới).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PUNNETT TABLE ============ -->
+  <section id="bang-lai">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>Bảng lai F1 × F1</div>
+      <h2 class="shead">16 tổ hợp ở đời F2</h2>
+      <p class="lede" style="margin-bottom:30px">Di chuột / chạm vào từng ô để xem chú thích. Màu sắc thể hiện 4 nhóm kiểu hình.</p>
+      <div class="box">
+        <div class="punnett-wrap">
+          <table class="punnett" id="punnettTable"></table>
+        </div>
+        <div class="legend-row" id="legendRow"></div>
+        <div class="tip-box" style="margin-top:26px;">
+          <h4>📖 Cách đọc bảng</h4>
+          <p>Ô ở giao giữa 1 hàng và 1 cột = kết quả khi giao tử của hàng đó kết hợp với giao tử của cột đó.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section id="thong-ke" class="soft">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>3. Kết quả</div>
+      <h2 class="shead">Tỉ lệ kiểu hình ở F2</h2>
+      <div class="stat-cards" id="statCards"></div>
+      <div class="bigratio">9 : 3 : 3 : 1</div>
+      <div class="mnemonic">Mẹo nhớ nhanh: (3 vàng : 1 xanh) × (3 trơn : 1 nhăn) = 9 : 3 : 3 : 1 — giống như nhân hai tỉ lệ 3:1 với nhau!</div>
+    </div>
+  </section>
+
+  <!-- ============ LAB ============ -->
+  <section id="lab">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>4. Phòng thí nghiệm ảo</div>
+      <h2 class="shead">Tự chọn phép lai của riêng em</h2>
+      <p class="lede" style="margin-bottom:30px">Chọn kiểu gene của hai cây bố mẹ, bấm nút để xem bảng lai và tỉ lệ kiểu hình được tạo ra ngay lập tức.</p>
+      <div class="box">
+        <div class="lab-parents">
+          <div class="parent-block">
+            <h4>🌱 Cây bố mẹ 1</h4>
+            <div class="gene-picker">
+              <span class="glabel">Màu hạt (A = vàng, a = xanh)</span>
+              <div class="seg" data-parent="1" data-gene="A">
+                <button type="button" data-val="AA">AA</button>
+                <button type="button" data-val="Aa" class="on">Aa</button>
+                <button type="button" data-val="aa">aa</button>
+              </div>
+            </div>
+            <div class="gene-picker">
+              <span class="glabel">Dạng hạt (B = trơn, b = nhăn)</span>
+              <div class="seg" data-parent="1" data-gene="B">
+                <button type="button" data-val="BB">BB</button>
+                <button type="button" data-val="Bb" class="on">Bb</button>
+                <button type="button" data-val="bb">bb</button>
+              </div>
+            </div>
+            <div class="pheno-preview" id="phenoLabel1">Hạt vàng, trơn</div>
+          </div>
+          <div class="parent-block">
+            <h4>🌱 Cây bố mẹ 2</h4>
+            <div class="gene-picker">
+              <span class="glabel">Màu hạt (A = vàng, a = xanh)</span>
+              <div class="seg" data-parent="2" data-gene="A">
+                <button type="button" data-val="AA">AA</button>
+                <button type="button" data-val="Aa" class="on">Aa</button>
+                <button type="button" data-val="aa">aa</button>
+              </div>
+            </div>
+            <div class="gene-picker">
+              <span class="glabel">Dạng hạt (B = trơn, b = nhăn)</span>
+              <div class="seg" data-parent="2" data-gene="B">
+                <button type="button" data-val="BB">BB</button>
+                <button type="button" data-val="Bb" class="on">Bb</button>
+                <button type="button" data-val="bb">bb</button>
+              </div>
+            </div>
+            <div class="pheno-preview" id="phenoLabel2">Hạt vàng, trơn</div>
+          </div>
+        </div>
+        <div class="cross-summary" id="crossSummary">Hạt vàng, trơn × Hạt vàng, trơn</div>
+        <div class="lab-actions">
+          <button type="button" class="btn-cross" id="crossBtn">🔬 Thực hiện phép lai</button>
+        </div>
+        <div id="labResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUY LUAT ============ -->
+  <section id="quy-luat" class="soft">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>5. Kết luận</div>
+      <h2 class="shead">Nội dung &amp; ý nghĩa quy luật</h2>
+      <div class="law-card">
+        <div class="qmark">"</div>
+        <p class="quote">Các cặp nhân tố di truyền (cặp allele) quy định các tính trạng khác nhau phân li độc lập với nhau trong quá trình hình thành giao tử.</p>
+      </div>
+      <div class="simple-box">
+        <h4>😊 Nói dễ hiểu hơn</h4>
+        <p>Tính trạng màu hạt (vàng/xanh) và tính trạng dạng hạt (trơn/nhăn) "đi con đường riêng" khi tạo giao tử — chúng không hề kéo theo nhau. Vì vậy có thể tự do kết hợp theo mọi cách, tạo ra nhiều kiểu hạt mới ở đời con.</p>
+      </div>
+      <div class="meaning-grid">
+        <div class="meaning-card">
+          <div class="meaning-head" style="background:var(--green-dk)">🌿 Trong tự nhiên</div>
+          <ul>
+            <li>Giải thích vì sao con cái có thể khác cả bố lẫn mẹ (biến dị tổ hợp).</li>
+            <li>Giúp sinh vật sinh sản hữu tính đa dạng, phong phú hơn qua các thế hệ.</li>
+            <li>Càng nhiều cặp gene dị hợp, số kiểu tổ hợp ở đời con càng tăng nhanh.</li>
+          </ul>
+        </div>
+        <div class="meaning-card">
+          <div class="meaning-head" style="background:var(--yellow-dk)">🌾 Trong chọn giống</div>
+          <ul>
+            <li>Đoán trước được tỉ lệ các loại con lai trước khi thực hiện phép lai.</li>
+            <li>Kết hợp nhiều đặc điểm tốt (ví dụ: lúa kháng sâu, năng suất cao) vào 1 giống mới.</li>
+            <li>Là cơ sở khoa học của việc lai tạo giống cây trồng, vật nuôi hiện nay.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Bài 37 · Các quy luật di truyền của Mendel — Phần II · Quy luật phân li độc lập</div>
+</footer>
+
+<script>
+function ready(fn){ if(document.readyState !== 'loading'){ fn(); } else { document.addEventListener('DOMContentLoaded', fn); } }
+
+var COLORS = {
+  yellowRound: '#FFC93C',
+  yellowWrinkled: '#F2994A',
+  greenRound: '#6FCF7C',
+  greenWrinkled: '#219653'
+};
+
+function phenoColor(genotype){
+  var hasA = genotype.indexOf('A') !== -1;
+  var hasB = genotype.indexOf('B') !== -1;
+  if(hasA && hasB) return COLORS.yellowRound;
+  if(hasA && !hasB) return COLORS.yellowWrinkled;
+  if(!hasA && hasB) return COLORS.greenRound;
+  return COLORS.greenWrinkled;
+}
+function phenoLabel(genotype){
+  var hasA = genotype.indexOf('A') !== -1;
+  var hasB = genotype.indexOf('B') !== -1;
+  return (hasA ? 'Vàng' : 'Xanh') + ', ' + (hasB ? 'trơn' : 'nhăn');
+}
+
+ready(function(){
+
+  /* ---------------- GLOSSARY ---------------- */
+  var terms = [
+    ['Allele', 'Một "phiên bản" của gene. Ví dụ: allele A quy định hạt vàng, allele a quy định hạt xanh.', 'var(--yellow)'],
+    ['Kiểu gene', 'Cặp allele mà cây có được, ví dụ: AA, Aa hoặc aa.', 'var(--yellow-dk)'],
+    ['Kiểu hình', 'Đặc điểm nhìn thấy được ra bên ngoài, ví dụ: hạt vàng, vỏ trơn.', 'var(--green)'],
+    ['Trội — lặn', 'Allele trội (chữ HOA) lấn át allele lặn (chữ thường). Aa vẫn biểu hiện kiểu hình trội.', 'var(--green-dk)'],
+    ['Đồng hợp — dị hợp', 'Đồng hợp: 2 allele giống nhau (AA, aa). Dị hợp: 2 allele khác nhau (Aa).', 'var(--blue)'],
+    ['Giao tử', 'Tế bào sinh dục (hạt phấn, noãn). Mỗi giao tử chỉ mang 1 allele trong mỗi cặp.', 'var(--coral)']
+  ];
+  var glossaryHTML = '';
+  for(var i=0;i<terms.length;i++){
+    glossaryHTML += '<div class="term-card"><div class="bar" style="background:'+terms[i][2]+'"></div><h4>'+terms[i][0]+'</h4><p>'+terms[i][1]+'</p></div>';
+  }
+  document.getElementById('glossaryGrid').innerHTML = glossaryHTML;
+
+  /* ---------------- TIMELINE (static, always visible) ---------------- */
+  var steps = [
+    ['P', 'Thế hệ bố mẹ thuần chủng', 'Cây hạt vàng, vỏ trơn (trội) × Cây hạt xanh, vỏ nhăn (lặn).', COLORS.yellowRound],
+    ['F1', 'Đời con đầu tiên', '100% cây hạt vàng, vỏ trơn — giống bố mẹ mang tính trạng trội.', COLORS.yellowWrinkled],
+    ['F1×F1', 'Tự thụ phấn', 'Cho các cây F1 tự thụ phấn với nhau.', COLORS.greenRound],
+    ['F2', 'Kết quả bất ngờ!', '556 hạt: 315 vàng-trơn · 108 vàng-nhăn · 101 xanh-trơn · 32 xanh-nhăn ≈ 9:3:3:1.', COLORS.greenWrinkled]
+  ];
+  var tlHTML = '';
+  for(var i=0;i<steps.length;i++){
+    tlHTML += '<div class="tl-item"><div class="tl-dot" style="background:'+steps[i][3]+'">'+steps[i][0]+'</div>' +
+      '<div class="tl-body"><h4>'+steps[i][1]+'</h4><p>'+steps[i][2]+'</p></div></div>';
+  }
+  document.getElementById('timelineHost').innerHTML = tlHTML;
+
+  /* ---------------- PUNNETT TABLE (static) ---------------- */
+  var gametesOrder = ['AB','Ab','aB','ab'];
+  function combineGametes(g1, g2){
+    var A1 = g1[0], B1 = g1[1], A2 = g2[0], B2 = g2[1];
+    var a = (A1 === 'A' || A2 === 'A') ? ((A1 === 'A' && A2 === 'A') ? 'AA' : 'Aa') : 'aa';
+    var b = (B1 === 'B' || B2 === 'B') ? ((B1 === 'B' && B2 === 'B') ? 'BB' : 'Bb') : 'bb';
+    return a + b;
+  }
+  var tableHTML = '<tr><th class="corner">♀ \\ ♂</th>';
+  for(var c=0;c<gametesOrder.length;c++){ tableHTML += '<th>'+gametesOrder[c]+'</th>'; }
+  tableHTML += '</tr>';
+  for(var r=0;r<gametesOrder.length;r++){
+    tableHTML += '<tr><th>'+gametesOrder[r]+'</th>';
+    for(var c2=0;c2<gametesOrder.length;c2++){
+      var geno = combineGametes(gametesOrder[r], gametesOrder[c2]);
+      var color = phenoColor(geno);
+      var label = phenoLabel(geno);
+      tableHTML += '<td style="background:'+color+'" title="'+geno+' \u2192 '+label+'">'+geno+'</td>';
+    }
+    tableHTML += '</tr>';
+  }
+  document.getElementById('punnettTable').innerHTML = tableHTML;
+
+  document.getElementById('legendRow').innerHTML =
+    '<div class="legend-item"><span class="swatch" style="background:'+COLORS.yellowRound+'"></span>Vàng, trơn — 9</div>' +
+    '<div class="legend-item"><span class="swatch" style="background:'+COLORS.yellowWrinkled+'"></span>Vàng, nhăn — 3</div>' +
+    '<div class="legend-item"><span class="swatch" style="background:'+COLORS.greenRound+'"></span>Xanh, trơn — 3</div>' +
+    '<div class="legend-item"><span class="swatch" style="background:'+COLORS.greenWrinkled+'"></span>Xanh, nhăn — 1</div>';
+
+  /* ---------------- STAT CARDS ---------------- */
+  var statData = [
+    [9, 'Vàng, trơn', COLORS.yellowRound],
+    [3, 'Vàng, nhăn', COLORS.yellowWrinkled],
+    [3, 'Xanh, trơn', COLORS.greenRound],
+    [1, 'Xanh, nhăn', COLORS.greenWrinkled]
+  ];
+  var statHTML = '';
+  for(var i=0;i<statData.length;i++){
+    statHTML += '<div class="stat-card"><div class="num" style="color:'+statData[i][2]+'">'+statData[i][0]+'</div><div class="lab">'+statData[i][1]+'</div></div>';
+  }
+  document.getElementById('statCards').innerHTML = statHTML;
+
+  /* ---------------- VIRTUAL LAB ---------------- */
+  var labState = { p1:{A:'Aa',B:'Bb'}, p2:{A:'Aa',B:'Bb'} };
+
+  function parentPhenoLabel(p){
+    var hasA = p.A !== 'aa';
+    var hasB = p.B !== 'bb';
+    return 'Hạt ' + (hasA ? 'vàng' : 'xanh') + ', ' + (hasB ? 'trơn' : 'nhăn');
+  }
+  function toHatLabel(l){ return 'Hạt ' + l.charAt(0).toLowerCase() + l.slice(1); }
+  function updatePreviews(){
+    document.getElementById('phenoLabel1').textContent = parentPhenoLabel(labState.p1);
+    document.getElementById('phenoLabel2').textContent = parentPhenoLabel(labState.p2);
+    document.getElementById('crossSummary').textContent =
+      parentPhenoLabel(labState.p1) + '  ×  ' + parentPhenoLabel(labState.p2);
+  }
+
+  var segs = document.querySelectorAll('.seg');
+  for(var s=0;s<segs.length;s++){
+    segs[s].addEventListener('click', (function(seg){
+      return function(e){
+        var btn = e.target.closest ? e.target.closest('button') : null;
+        if(!btn) return;
+        var parent = seg.getAttribute('data-parent');
+        var gene = seg.getAttribute('data-gene');
+        var val = btn.getAttribute('data-val');
+        labState['p'+parent][gene] = val;
+        var btns = seg.querySelectorAll('button');
+        for(var k=0;k<btns.length;k++){ btns[k].classList.toggle('on', btns[k]===btn); }
+        updatePreviews();
+      };
+    })(segs[s]));
+  }
+  updatePreviews();
+
+  function gcd(a,b){ return b ? gcd(b, a % b) : a; }
+  function gcdArr(arr){ var g = arr[0]; for(var i=1;i<arr.length;i++){ g = gcd(g, arr[i]); } return g; }
+  function alleleDist(genoStr){
+    var a1 = genoStr[0], a2 = genoStr[1];
+    if(a1 === a2) return [{a:a1, p:1}];
+    return [{a:a1,p:0.5},{a:a2,p:0.5}];
+  }
+  function gametesForParent(p){
+    var distA = alleleDist(p.A), distB = alleleDist(p.B);
+    var merged = {};
+    for(var i=0;i<distA.length;i++){
+      for(var j=0;j<distB.length;j++){
+        var g = distA[i].a + distB[j].a;
+        merged[g] = (merged[g] || 0) + distA[i].p * distB[j].p;
+      }
+    }
+    var out = [];
+    for(var key in merged){ out.push({g:key, p:merged[key]}); }
+    return out;
+  }
+  function crossParents(p1, p2){
+    var g1 = gametesForParent(p1), g2 = gametesForParent(p2);
+    var offspring = {};
+    for(var i=0;i<g1.length;i++){
+      for(var j=0;j<g2.length;j++){
+        var A = [g1[i].g[0], g2[j].g[0]];
+        var B = [g1[i].g[1], g2[j].g[1]];
+        var a = (A[0]==='A'||A[1]==='A') ? ((A[0]==='A'&&A[1]==='A') ? 'AA':'Aa') : 'aa';
+        var b = (B[0]==='B'||B[1]==='B') ? ((B[0]==='B'&&B[1]==='B') ? 'BB':'Bb') : 'bb';
+        var key = a+b;
+        offspring[key] = (offspring[key]||0) + g1[i].p * g2[j].p;
+      }
+    }
+    return {g1:g1, g2:g2, offspring:offspring};
+  }
+
+  function runCross(){
+    var result = crossParents(labState.p1, labState.p2);
+    var g1 = result.g1, g2 = result.g2, offspring = result.offspring;
+    var gametesA = []; for(var i=0;i<g1.length;i++){ gametesA.push(g1[i].g); }
+    var gametesB = []; for(var i=0;i<g2.length;i++){ gametesB.push(g2[i].g); }
+
+    var gridHTML = '<table class="punnett"><tr><th class="corner">♀ \\ ♂</th>';
+    for(var c=0;c<gametesB.length;c++){ gridHTML += '<th>'+gametesB[c]+'</th>'; }
+    gridHTML += '</tr>';
+    for(var r=0;r<gametesA.length;r++){
+      gridHTML += '<tr><th>'+gametesA[r]+'</th>';
+      for(var c2=0;c2<gametesB.length;c2++){
+        var A = [gametesA[r][0], gametesB[c2][0]];
+        var B = [gametesA[r][1], gametesB[c2][1]];
+        var a = (A[0]==='A'||A[1]==='A') ? ((A[0]==='A'&&A[1]==='A') ? 'AA':'Aa') : 'aa';
+        var b = (B[0]==='B'||B[1]==='B') ? ((B[0]==='B'&&B[1]==='B') ? 'BB':'Bb') : 'bb';
+        var geno = a+b;
+        gridHTML += '<td style="background:'+phenoColor(geno)+'" title="'+geno+' \u2192 '+phenoLabel(geno)+'">'+geno+'</td>';
+      }
+      gridHTML += '</tr>';
+    }
+    gridHTML += '</table>';
+
+    var phenoTotals = {};
+    for(var key in offspring){
+      var label = phenoLabel(key);
+      phenoTotals[label] = (phenoTotals[label] || 0) + offspring[key];
+    }
+    var denom = 64;
+    var labels = [], counts = [];
+    for(var label2 in phenoTotals){ labels.push(label2); counts.push(Math.round(phenoTotals[label2]*denom)); }
+    var g = gcdArr(counts);
+    var simplified = counts.map(function(n){ return n / g; });
+    var maxS = Math.max.apply(null, simplified);
+    var phenoColorMap = {
+      'Vàng, trơn': COLORS.yellowRound, 'Vàng, nhăn': COLORS.yellowWrinkled,
+      'Xanh, trơn': COLORS.greenRound, 'Xanh, nhăn': COLORS.greenWrinkled
+    };
+    var barsHTML = '';
+    for(var i=0;i<labels.length;i++){
+      barsHTML += '<div class="bar-row"><span>'+labels[i]+'</span>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:'+(simplified[i]/maxS*100)+'%;background:'+phenoColorMap[labels[i]]+'"></div></div>' +
+        '<b>'+simplified[i]+'</b></div>';
+    }
+    var ratioText = simplified.join(' : ');
+    var resultLabel = (labels.length === 1)
+      ? ('Kết quả: 100% ' + toHatLabel(labels[0]))
+      : ('Kết quả: ' + labels.map(toHatLabel).join(' : ') + '  =  ' + ratioText);
+
+    document.getElementById('labResult').innerHTML =
+      '<div class="lab-summary">P: <b>'+labState.p1.A+labState.p1.B+'</b> × <b>'+labState.p2.A+labState.p2.B+'</b> '+
+      ' &nbsp;·&nbsp; giao tử ♀: '+gametesA.join(', ')+' &nbsp;·&nbsp; giao tử ♂: '+gametesB.join(', ')+'</div>' +
+      '<div class="result-label">'+resultLabel+'</div>' +
+      '<div class="lab-grid-wrap"><div class="punnett-wrap">'+gridHTML+'</div>' +
+      '<div style="flex:1;min-width:260px"><div class="lab-ratio">Tỉ lệ kiểu hình: '+ratioText+'</div><div>'+barsHTML+'</div></div></div>';
+  }
+
+  document.getElementById('crossBtn').addEventListener('click', runCross);
+  runCross(); // show a default result right away, no click required
+
+});
+</script>
+</body>
+</html>
