@@ -81,6 +81,11 @@
   .video-section h2{ font-size:18px; font-weight:800; margin:0 0 10px; text-align:center; }
   .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:16px; overflow:hidden; background:#000; box-shadow:0 10px 24px rgba(0,0,0,.15); }
   .video-frame iframe{ position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+  .video-fallback{ position:absolute; inset:0; display:block; background:#000 center/cover no-repeat; text-decoration:none; }
+  .video-fallback .play{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:76px; height:54px; border-radius:14px; background:#FF0000; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,.4); }
+  .video-fallback .play::after{ content:''; border-left:22px solid #fff; border-top:13px solid transparent; border-bottom:13px solid transparent; margin-left:5px; }
+  .video-fallback .cap{ position:absolute; left:0; right:0; bottom:0; padding:12px 14px; color:#fff; font-weight:700; font-size:14px; text-align:center; background:linear-gradient(transparent, rgba(0,0,0,.75)); }
+  .video-link{ display:block; text-align:center; margin-top:10px; font-size:14px; font-weight:700; color:var(--blue-dk); }
 
   @media (max-width:980px){
     .lab-grid{ grid-template-columns:1fr; grid-template-areas:"p1" "p2" "cross" "result"; }
@@ -159,15 +164,16 @@
 
   <div class="video-section">
     <h2>🎬 Xem thêm video</h2>
-    <div class="video-frame">
+    <div class="video-frame" id="videoFrame">
       <iframe
-        src="https://www.youtube.com/watch?v=aGR0IchxV8I"
+        src="https://www.youtube.com/embed/aGR0IchxV8I"
         title="Video YouTube"
         referrerpolicy="strict-origin-when-cross-origin"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
     </div>
+    <a class="video-link" href="https://youtu.be/aGR0IchxV8I" target="_blank" rel="noopener">▶ Mở video trên YouTube</a>
   </div>
 </div>
 
@@ -193,6 +199,15 @@ function phenoLabel(g){ var a=g.indexOf('A')!==-1,b=g.indexOf('B')!==-1; return 
 function phenoLabelHat(g){ var a=g.indexOf('A')!==-1,b=g.indexOf('B')!==-1; return 'Hạt '+(a?'vàng':'xanh')+', '+(b?'trơn':'nhăn'); }
 
 ready(function(){
+
+  if(location.protocol === 'file:'){
+    var vf = document.getElementById('videoFrame');
+    if(vf){
+      vf.innerHTML = '<a class="video-fallback" href="https://youtu.be/aGR0IchxV8I" target="_blank" rel="noopener" ' +
+        'style="background-image:url(https://img.youtube.com/vi/aGR0IchxV8I/hqdefault.jpg)">' +
+        '<span class="play"></span><span class="cap">Bấm để xem video trên YouTube</span></a>';
+    }
+  }
 
   var labState = { p1:{A:'Aa',B:'Bb'}, p2:{A:'Aa',B:'Bb'} };
 
